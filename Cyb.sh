@@ -1,46 +1,41 @@
-#!/usr/bin/expect -f
+#!/bin/bash
 
-# Fungsi untuk memastikan hanya user root yang dapat menjalankan skrip
-if {[exec id -u] != 0} {
-    puts "This script must be run as root. Exiting."
+# Fungsi untuk memeriksa apakah user adalah root
+check_root() {
+  if [ "$(id -u)" -ne 0 ]; then
+    echo "This script must be run as root. Please switch to root user."
     exit 1
+  fi
 }
 
-# Jalankan instalasi CyberPanel
-spawn bash <(curl -s https://cyberpanel.net/install.sh || wget -qO - https://cyberpanel.net/install.sh)
+# Fungsi untuk menjalankan instalasi CyberPanel
+install_cyberpanel() {
+  echo "Starting CyberPanel installation..."
 
-expect "Please enter the right number"
-send "1\r"
+  # Memberikan input otomatis melalui pipeline
+  {
+    echo "1"   # Pilih CyberPanel OpenLiteSpeed
+    echo "Y"   # Konfirmasi instalasi
+    echo "N"   # Tidak menginstal versi enterprise
+    echo "Y"   # Instal PowerDNS
+    echo "Y"   # Instal Postfix
+    echo "Y"   # Instal Pure-FTPd
+    echo "N"   # Tidak menggunakan remote MySQL
+    echo "r"   # Generate password secara acak
+    echo "Y"   # Instal Memcached
+    echo "Y"   # Instal Redis
+    echo "Y"   # Instal Watchdog
+  } | bash <(curl -s https://cyberpanel.net/install.sh || wget -qO - https://cyberpanel.net/install.sh)
 
-expect "Do you want to install full service"
-send "Y\r"
+  echo "CyberPanel installation has been completed."
+}
 
-expect "Do you want to install LiteSpeed Enterprise"
-send "N\r"
+# Fungsi untuk menampilkan informasi penting setelah instalasi
+finalize_installation() {
+  echo "Installation finished. Please copy the configuration details displayed on the screen to a safe place."
+}
 
-expect "Do you want to set up PowerDNS"
-send "Y\r"
-
-expect "Do you want to set up Postfix"
-send "Y\r"
-
-expect "Do you want to set up Pure-FTPd"
-send "Y\r"
-
-expect "Would you like to use a remote database"
-send "N\r"
-
-expect "Please select WebAdmin password"
-send "r\r"
-
-expect "Would you like to enable Memcached"
-send "Y\r"
-
-expect "Would you like to enable Redis"
-send "Y\r"
-
-expect "Would you like to enable Watchdog"
-send "Y\r"
-
-# Tunggu proses instalasi selesai
-interact
+# Main script
+check_root
+install_cyberpanel
+finalize_installation
