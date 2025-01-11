@@ -14,13 +14,11 @@ install_cyberpanel() {
 
   # Memberikan input otomatis melalui pipeline
   {
+    echo "1"   # Pilih CyberPanel
     echo "1"   # Pilih CyberPanel OpenLiteSpeed
     echo "Y"   # Konfirmasi instalasi
-    echo "N"   # Tidak menginstal versi enterprise
-    echo "Y"   # Instal PowerDNS
-    echo "Y"   # Instal Postfix
-    echo "Y"   # Instal Pure-FTPd
     echo "N"   # Tidak menggunakan remote MySQL
+    echo "2.3.4"   # Tidak menggunakan remote MySQL
     echo "r"   # Generate password secara acak
     echo "Y"   # Instal Memcached
     echo "Y"   # Instal Redis
