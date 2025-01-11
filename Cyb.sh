@@ -1,41 +1,46 @@
-#!/bin/bash
+#!/usr/bin/expect -f
 
-# Fungsi untuk memeriksa apakah user adalah root
-check_root() {
-  if [ "$(id -u)" -ne 0 ]; then
-    echo "This script must be run as root. Please switch to root user."
+# Fungsi untuk memastikan hanya user root yang dapat menjalankan skrip
+if {[exec id -u] != 0} {
+    puts "This script must be run as root. Exiting."
     exit 1
-  fi
 }
 
-# Fungsi untuk menjalankan instalasi CyberPanel
-install_cyberpanel() {
-  echo "Starting CyberPanel installation..."
-  
-  # Jalankan perintah instalasi dengan input otomatis
-  bash <(curl -s https://cyberpanel.net/install.sh || wget -qO - https://cyberpanel.net/install.sh) <<EOF
-1   # Pilih CyberPanel OpenLiteSpeed
-y   # Konfirmasi instalasi
-n   # Tidak menginstal versi enterprise
-y   # Instal PowerDNS
-y   # Instal Postfix
-y   # Instal Pure-FTPd
-n   # Tidak menggunakan remote MySQL
-r   # Generate password secara acak
-y   # Instal Memcached
-y   # Instal Redis
-y   # Instal Watchdog
-EOF
+# Jalankan instalasi CyberPanel
+spawn bash <(curl -s https://cyberpanel.net/install.sh || wget -qO - https://cyberpanel.net/install.sh)
 
-  echo "CyberPanel installation has been completed."
-}
+expect "Please enter the right number"
+send "1\r"
 
-# Fungsi untuk menampilkan informasi penting setelah instalasi
-finalize_installation() {
-  echo "Installation finished. Please copy the configuration details displayed on the screen to a safe place."
-}
+expect "Do you want to install full service"
+send "Y\r"
 
-# Main script
-check_root
-install_cyberpanel
-finalize_installation
+expect "Do you want to install LiteSpeed Enterprise"
+send "N\r"
+
+expect "Do you want to set up PowerDNS"
+send "Y\r"
+
+expect "Do you want to set up Postfix"
+send "Y\r"
+
+expect "Do you want to set up Pure-FTPd"
+send "Y\r"
+
+expect "Would you like to use a remote database"
+send "N\r"
+
+expect "Please select WebAdmin password"
+send "r\r"
+
+expect "Would you like to enable Memcached"
+send "Y\r"
+
+expect "Would you like to enable Redis"
+send "Y\r"
+
+expect "Would you like to enable Watchdog"
+send "Y\r"
+
+# Tunggu proses instalasi selesai
+interact
