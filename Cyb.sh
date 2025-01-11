@@ -12,7 +12,7 @@ check_root() {
 install_cyberpanel() {
   echo "Starting CyberPanel installation..."
   
-  # Jalankan perintah instalasi
+  # Jalankan perintah instalasi dengan input otomatis
   bash <(curl -s https://cyberpanel.net/install.sh || wget -qO - https://cyberpanel.net/install.sh) <<EOF
 1   # Pilih CyberPanel OpenLiteSpeed
 y   # Konfirmasi instalasi
