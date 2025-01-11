@@ -17,7 +17,7 @@ install_cyberpanel() {
     echo "1"   # Pilih CyberPanel
     echo "1"   # Pilih CyberPanel OpenLiteSpeed
     echo "Y"   # Konfirmasi instalasi
-    echo "N"   # Tidak menggunakan remote MySQL
+    echo "Y"   # Tidak menggunakan remote MySQL
     echo "2.3.4"   # Tidak menggunakan remote MySQL
     echo "r"   # Generate password secara acak
     echo "Y"   # Instal Memcached
